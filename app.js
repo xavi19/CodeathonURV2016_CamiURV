@@ -7,7 +7,13 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+var fs = require('fs');
+var methodOverride = require("method-override");
+var mongoose = require('mongoose');
 
+var Cotxe  = mongoose.model('Cotxe');
+var Passatger  = mongoose.model('Passatger');
 var mapa = io.of('/mapa');
 var chat = io.of('/chat');
 var rooms =["main"];
@@ -16,6 +22,9 @@ var rooms =["main"];
 app.set('view engine','jade');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride());
 
 //Rutas
 app.get('/cotxe', function(req, res){
@@ -28,7 +37,8 @@ app.get('/android', function(req, res){
 });
 
 app.post('/cotxe', function(data){
-	console.log(data)
+	
+
 });
 
 app.get('/cotxe/:canal', function(req, res){
@@ -40,10 +50,16 @@ app.get('/peu', function(req, res){
 	
 });
 
+// LLegir de cotxes.json
 app.get('/chat', function(req, res){
-	res.render('chat');
+	res.render('chat')
 	
 });
+
+
+app.get('/form', function(req, res){
+	res.render('form')
+})
 
 //Manejo de eventos para los clientes con sockets
 mapa.on('connection', function(socket){
@@ -80,6 +96,16 @@ chat.on('connection', function(socket){
 });
 
 console.log(rooms);
+
+//GET - Return all tvshows in the DB
+exports.cercarCotxes = function(req, res) {  
+    Cotxe.find(function(err, tvshows) {
+    if(err) res.send(500, err.message);
+
+    console.log('GET /cotxes')
+        res.status(200).jsonp(cotxe);
+    });
+};
 
 //Puerto para servir
 http.listen(app.get('port'), function(){
