@@ -1,0 +1,19 @@
+{
+  "name": "camiurv",
+  "version": "1.0.0",
+  "description": "Prova de pujada de archius",
+  "main": "app.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanbardon/CodeathonURV2016_CamiURV.git"
+  },
+  "author": "CamiURV",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ivanbardon/CodeathonURV2016_CamiURV/issues"
+  },
+  "homepage": "https://github.com/ivanbardon/CodeathonURV2016_CamiURV#readme"
+}
