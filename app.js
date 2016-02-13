@@ -27,6 +27,10 @@ app.get('/android', function(req, res){
 	res.send('Ja estas conectat')
 });
 
+app.post('/cotxe', function(data){
+	console.log(data)
+});
+
 app.get('/cotxe/:canal', function(req, res){
 	res.render('cotxe');
 });
@@ -53,7 +57,7 @@ mapa.on('connection', function(socket){
         }
     });
     socket.on('removeRoom', function(room){
-    	var aux = rooms.indexOf('romm');
+    	var aux = rooms.indexOf(room);
     	delete rooms[aux];
     	console.log(rooms);
     })
@@ -64,7 +68,7 @@ mapa.on('connection', function(socket){
 		
 	}); 
 	// funcion para suscribirme al ultimo param de la url
-	if (urlEnd[urlEnd.length-2] === 'fw'){
+	if (urlEnd[urlEnd.length-2] === 'cotxe'){
 		socket.join(urlEnd[urlEnd.length-1]);
 	}
 });

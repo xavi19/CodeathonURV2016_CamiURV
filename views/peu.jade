@@ -6,7 +6,7 @@ html(lang="es")
 		title followMe
 
 	body
-		h1 Bienvenido a followMe
+		h1 Benvinguts a CamiURV
 		br
 		br
 		form(action="/")
@@ -34,6 +34,7 @@ html(lang="es")
 				nick = $('#nombre').val();
 				room = $('#evento').val();
 				loc();
+				socket.emit('addRoom', room);
 			});
 			
 			function loc(){
@@ -43,7 +44,7 @@ html(lang="es")
 
 				}
 				else {
-					$('h1').innerHTML("Tu navegador no soporta geolocalización");
+					$('h1').innerHTML("El teu Navegador no soporta geolocalització");
 				}
 			};
 			//- Callback de ok, construccion del usuario y emision de eventos para añadir rooms al server y para enviar la localizacion
@@ -57,7 +58,6 @@ html(lang="es")
 							lng: cor.longitude
 						}
 					};
-				socket.emit('addRoom', room);
 				socket.emit('send loc', user);
 
 			};
