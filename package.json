@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/ivanbardon/CodeathonURV2016_CamiURV/issues"
   },
-  "homepage": "https://github.com/ivanbardon/CodeathonURV2016_CamiURV#readme"
+  "homepage": "https://github.com/ivanbardon/CodeathonURV2016_CamiURV#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "jade": "^1.11.0",
+    "socket.io": "^1.4.5"
+  }
 }
