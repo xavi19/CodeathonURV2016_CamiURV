@@ -16,21 +16,23 @@ var rooms =["main"];
 app.set('view engine','jade');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('/public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
 
 //Rutas
-app.get('/fw', function(req, res){
-	res.render('fw');
+app.get('/cotxe', function(req, res){
+	res.render('cotxe');
 
 });
 
-app.get('/fw/:evento', function(req, res){
-	res.render('fw');
+app.get('/android', function(req, res){
+	res.send('Ja estas conectat')
 });
 
-app.get('/fm', function(req, res){
-	res.render('fm');
+app.get('/cotxe/:canal', function(req, res){
+	res.render('cotxe');
+});
+
+app.get('/peu', function(req, res){
+	res.render('peu');
 	
 });
 
