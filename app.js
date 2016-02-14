@@ -7,15 +7,20 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+
 
 var mapa = io.of('/mapa');
 var chat = io.of('/chat');
 var rooms =["main"];
 
+
 //Configuración
 app.set('view engine','jade');
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 //Rutas
 app.get('/cotxe', function(req, res){
@@ -23,8 +28,13 @@ app.get('/cotxe', function(req, res){
 
 });
 
-app.get('/android', function(req, res){
-	res.send('Ja estas conectat')
+
+app.post('/cotxe', function(data){
+	
+
+});
+app.post('/passatger', function(req, res){
+	
 });
 
 app.get('/cotxe/:canal', function(req, res){
@@ -36,10 +46,16 @@ app.get('/peu', function(req, res){
 	
 });
 
+// LLegir de cotxes.json
 app.get('/chat', function(req, res){
-	res.render('chat');
+	res.render('chat')
 	
 });
+
+
+app.get('/form', function(req, res){
+	res.render('form')
+})
 
 //Manejo de eventos para los clientes con sockets
 mapa.on('connection', function(socket){
@@ -53,7 +69,7 @@ mapa.on('connection', function(socket){
         }
     });
     socket.on('removeRoom', function(room){
-    	var aux = rooms.indexOf('romm');
+    	var aux = rooms.indexOf(room);
     	delete rooms[aux];
     	console.log(rooms);
     })
@@ -64,7 +80,7 @@ mapa.on('connection', function(socket){
 		
 	}); 
 	// funcion para suscribirme al ultimo param de la url
-	if (urlEnd[urlEnd.length-2] === 'fw'){
+	if (urlEnd[urlEnd.length-2] === 'cotxe'){
 		socket.join(urlEnd[urlEnd.length-1]);
 	}
 });
@@ -76,6 +92,10 @@ chat.on('connection', function(socket){
 });
 
 console.log(rooms);
+
+
+
+
 
 //Puerto para servir
 http.listen(app.get('port'), function(){
