@@ -1,0 +1,102 @@
+doctype html
+html(lang="es")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no")
+		link(rel="stylesheet" href="estilos.css")
+		title  Form. cotxe registre
+
+	body
+		header
+			img(src="Imagenes/logotip.png" alt="logo" width="130")
+		div.header2
+			p Universitat Rovira y Virgili
+		h1 Usuari amb cotxe
+		div.border
+		form.cotxeform
+			div.info1
+				h3 Informació de l'usuari:
+				p.p1 Nom:
+				input(type="text" id="nom" placeholder="Juan..")
+				p Selecciona un punt de sortida clickant al mapa:
+				img(src="http://maps.googleapis.com/maps/api/staticmap?center=41.399598,1.247790&zoom=8&size=300x300&maptype=roadmap", alt="mapa")
+
+			br
+			br
+			div.info2
+				h3 Informació del vehicle:
+				p Color:
+				input(type="text" id="color" placeholder="Blau...")
+				br
+				br
+				p.p4 Marca:
+				input(type="text" id="marca" placeholder="Audi...")
+				p.p5 Model:
+				input(type="text" model="model" placeholder="A1..")
+		
+			button(id="enviar" class="btnAzul") enviar formulari
+
+
+
+
+
+
+
+
+
+		//- img(src="http://maps.googleapis.com/maps/api/staticmap?center=41.399598,1.247790&zoom=8&size=300x300&maptype=roadmap", alt="mapa")
+		//- Requerimientos de los vendors
+		script(src="//cdn.socket.io/socket.io-1.2.0.js")
+		script(src="//code.jquery.com/jquery-1.11.1.js")
+		
+		//- Script principal
+		script(type="text/javascript").
+			var socket = io('/mapa');
+			//https://infinite-tundra-1079.herokuapp.com
+			var nick;
+			var room;
+			$('#enviar').on('click', function(){
+				nick = $('#nom').val();
+				room = $('#nom').val();
+				loc();
+				socket.emit('addRoom', room);
+			});
+			
+			function loc(){
+				if (navigator.geolocation){
+
+					navigator.geolocation.watchPosition(succes, fail, options);
+
+				}
+				else {
+					$('h1').innerHTML("El teu Navegador no soporta geolocalització");
+				}
+			};
+			//- Callback de ok, construccion del usuario y emision de eventos para añadir rooms al server y para enviar la localizacion
+			function succes(pos){
+				var cor = pos.coords;
+				
+				var user ={
+						nick: nick,
+						pos:{
+							lat: cor.latitude,
+							lng: cor.longitude
+						}
+					};
+				socket.emit('send loc', user);
+
+			};
+			//- manejo de errores
+			function fail (err){
+				console.log('ERROR(' + err.code + '): ' + err.message);
+			};
+
+			options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			};
+			// Manejo de eventos en el cliente
+			socket.on('disconnect', function(){
+				socket.emit('removeRoom', room)
+			});

@@ -1,0 +1,30 @@
+doctype html
+html(lang="es")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no")
+		link(rel="stylesheet" href="estilos.css")
+		title   Form. usuari registre
+
+	body
+		header
+			img(src="Imagenes/logotip.png" alt="logo" width="130")
+		div.header2
+			p Universitat Rovira y Virgili
+		h1 Usuari a peu
+		div.border
+		form.formulari
+			div.usuaripeu
+				h3 
+				p.p1 Nom:
+				input(type="text" name="nom" placeholder="Juan..")
+				p Selecciona un punt de recollida clickant al mapa:
+				img(src="http://maps.googleapis.com/maps/api/staticmap?center=41.399598,1.247790&zoom=8&size=300x300&maptype=roadmap", alt="mapa")
+
+	button(id="enviar" class="btnAzul") enviar formulari
+
+	script(src="//code.jquery.com/jquery-1.11.1.js")
+	script(type="text/javascript").
+		$('#enviar').on('click', function(){
+			location.assign('/soli')
+		})
