@@ -18,44 +18,40 @@ var rooms =["main"];
 //Configuración
 app.set('view engine','jade');
 app.set('port', process.env.PORT || 3000);
-app.use(express.static('/public'));
+app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 //Rutas
-app.get('/cotxe', function(req, res){
-	res.render('cotxe');
-
-});
-
-
-app.post('/cotxe', function(data){
-	
-
-});
-app.post('/passatger', function(req, res){
-	
-});
-
-app.get('/cotxe/:canal', function(req, res){
-	res.render('cotxe');
-});
-
 app.get('/peu', function(req, res){
-	res.render('peu');
-	
-});
+	res.render('formPeu');
 
-// LLegir de cotxes.json
-app.get('/chat', function(req, res){
-	res.render('chat')
-	
 });
 
 
-app.get('/form', function(req, res){
-	res.render('form')
-})
+
+app.get('/pet', function(req, res){
+	res.render('pet')
+});
+
+app.get('/mapa/:canal', function(req, res){
+	res.render('mapaPass');
+});
+
+app.get('/mapa', function(req, res){
+	res.render('mapaPass');
+});
+
+app.get('/cotxe', function(req, res){
+	res.render('formCotxe');
+	
+});
+
+app.get('/soli', function(req, res){
+	res.render('solicituts')
+	
+});
+
 
 //Manejo de eventos para los clientes con sockets
 mapa.on('connection', function(socket){
@@ -80,7 +76,7 @@ mapa.on('connection', function(socket){
 		
 	}); 
 	// funcion para suscribirme al ultimo param de la url
-	if (urlEnd[urlEnd.length-2] === 'cotxe'){
+	if (urlEnd[urlEnd.length-2] === 'mapa'){
 		socket.join(urlEnd[urlEnd.length-1]);
 	}
 });
