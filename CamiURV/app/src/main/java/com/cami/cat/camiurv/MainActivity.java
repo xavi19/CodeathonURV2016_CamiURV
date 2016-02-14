@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationCompat.Builder mBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.notification_icon)
+                        .setSmallIcon(R.drawable.car)
                         .setContentTitle("CamiURV")
                         .setContentText("Sol·licitut de passatger!");
         // Creates an explicit intent for an Activity in your app
