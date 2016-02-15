@@ -1,0 +1,69 @@
+doctype html
+html(lang="es")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no")
+		title CamiURV
+		style.
+			body { height: 100%; margin: 0; padding: 0; }
+			html { height: 100%; margin: 0; padding: 0; }
+			#map {  height: 100% }
+	body
+
+		div#map
+
+
+		script(src="//cdn.socket.io/socket.io-1.2.0.js")
+		script(src="//code.jquery.com/jquery-1.11.1.js")
+		script(async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyD6WtX3nH5hCa9uaFHj04e8BtGwhVCZ4lk&callback=initMap")
+
+		script(type="text/javascript").
+			var socket = io('/mapa');
+			//https://infinite-tundra-1079.herokuapp.com
+			socket.on('print loc', function(data){
+				console.log(data);
+				var marker = new google.maps.Marker({
+					position: data.pos,
+					map: map,
+					title: data.nick
+				});
+				map.setCenter(data.pos);
+			});
+			var map;
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					center: {lat: 41.399598, lng: 1.247790},
+					zoom: 10
+				});
+			}
+			function loc(){
+				if (navigator.geolocation){
+
+					navigator.geolocation.watchPosition(succes, fail, options);
+
+				}
+				else {
+					$('h1').innerHTML("El teu Navegador no soporta geolocalització");
+				}
+			};
+			//- Callback de ok, construccion del usuario y emision de eventos para añadir rooms al server y para enviar la localizacion
+			function succes(pos){
+				var cor = pos.coords;
+				
+				var marker = new google.maps.Marker({
+					position: {lat:cor.latitude,lng:cor.longitude},
+					map: map,
+					title: 'Aquest ets tu'
+				});
+
+			};
+			//- manejo de errores
+			function fail (err){
+				console.log('ERROR(' + err.code + '): ' + err.message);
+			};
+
+			options = {
+				enableHighAccuracy: true,
+				timeout: 5000,
+				maximumAge: 0
+			};

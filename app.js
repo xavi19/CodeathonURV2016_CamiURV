@@ -7,39 +7,51 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var bodyParser = require('body-parser');
+
 
 var mapa = io.of('/mapa');
 var chat = io.of('/chat');
 var rooms =["main"];
 
+
 //Configuración
 app.set('view engine','jade');
 app.set('port', process.env.PORT || 3000);
-app.use(express.static('/public'));
+app.use(express.static('public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 //Rutas
-app.get('/cotxe', function(req, res){
-	res.render('cotxe');
-
-});
-
-app.get('/android', function(req, res){
-	res.send('Ja estas conectat')
-});
-
-app.get('/cotxe/:canal', function(req, res){
-	res.render('cotxe');
-});
-
 app.get('/peu', function(req, res){
-	res.render('peu');
+	res.render('formPeu');
+
+});
+
+
+
+app.get('/pet', function(req, res){
+	res.render('pet')
+});
+
+app.get('/mapa/:canal', function(req, res){
+	res.render('mapaPass');
+});
+
+app.get('/mapa', function(req, res){
+	res.render('mapaPass');
+});
+
+app.get('/cotxe', function(req, res){
+	res.render('formCotxe');
 	
 });
 
-app.get('/chat', function(req, res){
-	res.render('chat');
+app.get('/soli', function(req, res){
+	res.render('solicituts')
 	
 });
+
 
 //Manejo de eventos para los clientes con sockets
 mapa.on('connection', function(socket){
@@ -53,7 +65,7 @@ mapa.on('connection', function(socket){
         }
     });
     socket.on('removeRoom', function(room){
-    	var aux = rooms.indexOf('romm');
+    	var aux = rooms.indexOf(room);
     	delete rooms[aux];
     	console.log(rooms);
     })
@@ -64,7 +76,7 @@ mapa.on('connection', function(socket){
 		
 	}); 
 	// funcion para suscribirme al ultimo param de la url
-	if (urlEnd[urlEnd.length-2] === 'fw'){
+	if (urlEnd[urlEnd.length-2] === 'mapa'){
 		socket.join(urlEnd[urlEnd.length-1]);
 	}
 });
@@ -76,6 +88,10 @@ chat.on('connection', function(socket){
 });
 
 console.log(rooms);
+
+
+
+
 
 //Puerto para servir
 http.listen(app.get('port'), function(){
